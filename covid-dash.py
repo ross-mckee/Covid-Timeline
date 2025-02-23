@@ -1,8 +1,8 @@
 import pandas as pd
 import plotly.express as px
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html
+from dash import dcc
 from dash.dependencies import Input, Output
 
 # Read data
@@ -17,4 +17,19 @@ df.drop('Long', inplace = True)
 df.columns = df.iloc[0]
 df.drop('Country/Region', inplace=True)
 
-print(df.head())
+app = dash.Dash()
+
+# Design Dash Layout
+app.layout = html.Div(children=[
+    html.H1("Covid-19 Dashboard",
+        style={'textAlign':'center', 'color':'red','font-size':40}),
+    html.Div(["Input:", dcc.Input(id='input-country',value='Austria',type='string',
+        style={'height':'50px','font-size':35}),],
+        style={'font-size':40}),
+    html.Br(),
+    html.Br(),
+    html.Div(dcc.Graph(id='bar-plot')),
+])
+
+if __name__ == "__main__":
+    app.run(debug=True)
