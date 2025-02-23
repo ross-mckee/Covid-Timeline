@@ -23,12 +23,18 @@ app = dash.Dash()
 app.layout = html.Div(children=[
     html.H1("Covid-19 Dashboard",
         style={'textAlign':'center', 'color':'red','font-size':40}),
-    html.Div(["Input:", dcc.Input(id='input-country',value='Austria',type='string',
-        style={'height':'50px','font-size':35}),],
+    html.Div(["Input:",
+        dcc.Dropdown(id='input-country',
+            options=[
+                {"label":"Austria","value":"Austria"},
+                {"label":"Vietnam","value":"Vietnam"}],
+            multi=False,
+            value="Austria",
+            style={'height':'50px','font-size':35}),],
         style={'font-size':40}),
     html.Br(),
     html.Br(),
-    html.Div(dcc.Graph(id='bar-plot')),
+    html.Div(dcc.Graph(id='line-plot')),
 ])
 
 if __name__ == "__main__":
