@@ -16,8 +16,15 @@ df.drop('Lat', inplace = True)
 df.drop('Long', inplace = True)
 df.columns = df.iloc[0]
 df.drop('Country/Region', inplace=True)
+df.reset_index(inplace=True)
+
+print(df.head())
+
+print(df.columns)
 
 app = dash.Dash()
+
+# -----------------------------------------------
 
 # Design Dash Layout
 app.layout = html.Div(children=[
@@ -25,9 +32,7 @@ app.layout = html.Div(children=[
         style={'textAlign':'center', 'color':'red','font-size':40}),
     html.Div(["Input:",
         dcc.Dropdown(id='input-country',
-            options=[
-                {"label":"Austria","value":"Austria"},
-                {"label":"Vietnam","value":"Vietnam"}],
+            options=["Austria","Vietnam"],
             multi=False,
             value="Austria",
             style={'height':'50px','font-size':35}),],
@@ -36,6 +41,23 @@ app.layout = html.Div(children=[
     html.Br(),
     html.Div(dcc.Graph(id='line-plot')),
 ])
+
+# ------------------------------------------------
+
+# Plotly callback
+@app.callback(
+    Output(component_id='line-plot', component_property='figure'),
+    Input(component_id='input-country', component_property='value')
+)
+def update_line_chart(entered_country):
+    #select data
+    #df_line = df[[entered_country]] #original idea, seems unnecessary
+    #plot the graph
+    fig1 = px.line(df, x='index', y=entered_country,
+                   title="TITLETITLE")
+    return fig1
+
+# ------------------------------------------------
 
 if __name__ == "__main__":
     app.run(debug=True)
