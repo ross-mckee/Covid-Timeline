@@ -20,7 +20,8 @@ df.reset_index(inplace=True)
 
 print(df.head())
 
-print(df.columns)
+# Get this line to print all of the country names.
+print(df.columns[0])
 
 app = dash.Dash()
 
@@ -54,7 +55,7 @@ def update_line_chart(entered_country):
     #df_line = df[[entered_country]] #original idea, seems unnecessary
     #plot the graph
     fig1 = px.line(df, x='index', y=entered_country,
-                   title="TITLETITLE")
+                   title="TITLE"+entered_country)
     return fig1
 
 # ------------------------------------------------
