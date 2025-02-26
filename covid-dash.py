@@ -10,18 +10,22 @@ covid_data = pd.read_csv("time_series_covid19_confirmed_global.csv")
 
 # Transpose data, so that countries are columns and rows are dates
 df = covid_data.copy()
+
 df = df.transpose()
 df.drop('Province/State', inplace = True)
 df.drop('Lat', inplace = True)
 df.drop('Long', inplace = True)
+# Set column index to Country/Region
 df.columns = df.iloc[0]
 df.drop('Country/Region', inplace=True)
+
+df_gb = df.groupby(by='Country/Region', axis=1).sum() #Combines columns with the same index, thus combining all sub-territories within a country/region.
+df = df_gb.copy()
+
 df.reset_index(inplace=True)
 
-print(df.head())
-
 # Get this line to print all of the country names.
-print(df.columns[0])
+#print(df.columns[0])
 
 app = dash.Dash()
 
@@ -33,7 +37,7 @@ app.layout = html.Div(children=[
         style={'textAlign':'center', 'color':'red','font-size':40}),
     html.Div(["Input:",
         dcc.Dropdown(id='input-country',
-            options=["Austria","Vietnam"],
+            options=["Australia","Austria","Vietnam"],
             multi=False,
             value="Austria",
             style={'height':'50px','font-size':35}),],
@@ -55,7 +59,7 @@ def update_line_chart(entered_country):
     #df_line = df[[entered_country]] #original idea, seems unnecessary
     #plot the graph
     fig1 = px.line(df, x='index', y=entered_country,
-                   title="TITLE"+entered_country)
+                   title="Total Confirmed CoViD-19 Cases in "+entered_country+" Over Time")
     return fig1
 
 # ------------------------------------------------
